@@ -2,6 +2,7 @@ const MOVE_UP_KEY_CODES = ["ArrowUp", "KeyW"];
 const MOVE_DOWN_KEY_CODES = ["ArrowDown", "KeyS"];
 const MOVE_LEFT_KEY_CODES = ["ArrowLeft", "KeyA"];
 const MOVE_RIGHT_KEY_CODES = ["ArrowRight", "KeyD"];
+const ALL_MOVE_KEY_CODES = [...MOVE_UP_KEY_CODES, ...MOVE_DOWN_KEY_CODES, ...MOVE_LEFT_KEY_CODES, ...MOVE_RIGHT_KEY_CODES];
 
 export class Player {
     constructor(x, y, context) {
@@ -28,12 +29,27 @@ export class Player {
         this.image.src = "./img/player.png";
         this.imageWidth = 50;
         this.imageHeight = 60;
+        this.isMoving = false;
+        this.imageTick = 0;
     }
 
     drawImg() {
+        const imageTickLimit = 18;
+        let subX = 0;
+        if (!this.isMoving) {
+            subX = 0;
+            this.imageTick = 0;
+        } else {
+            subX = this.imageTick > imageTickLimit ? this.imageWidth * 2 : this.imageWidth;
+            this.imageTick++;
+        }
+        if (this.imageTick > imageTickLimit*2) {
+            this.imageTick = 0;
+        }
+
         this.context.drawImage(
             this.image,
-            0,
+            subX,
             0,
             this.imageWidth,
             this.imageHeight,
@@ -56,6 +72,7 @@ export class Player {
 
     update() {
         this.draw();
+        this.isMoving = this.shouldMove(ALL_MOVE_KEY_CODES);
         this.updatePosition();
     }
 
