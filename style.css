@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.bg-wrap {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+
+.left-bg {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 1200px;
+    background: url("./img/bg-left.png") repeat-y;
+}
+
+.center-bg, .right-bg {
+    display: none;
+}
+
+@media only screen and (min-width: 1200px) {
+    .right-bg {
+        display: block;
+        flex-grow: 1;
+        background: url("./img/bg-right.png") repeat-y;
+    }
+}
+
+@media only screen and (min-width: 2400px) {
+    .right-bg {
+        width: 1200px;
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    .center-bg {
+        display: block;
+        flex-grow: 1;
+        background: url("./img/bg-center.png") repeat;
+    }
+}
