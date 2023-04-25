@@ -46,3 +46,13 @@ body {
         background: url("./img/bg-center.png") repeat;
     }
 }
+
+.wasted {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    max-width: 450px;
+}
