@@ -9,12 +9,16 @@ canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 
 const wastedElement = document.querySelector('.wasted');
+const scoreElement = document.querySelector('#score');
 
 let player;
 let projectiles = [];
 let enemies = [];
 let particles = [];
 let animationId;
+let spawnIntervalId;
+let countIntervalId;
+let score = 0;
 
 startGame();
 
@@ -47,6 +51,8 @@ function animate() {
     const isGameOver = enemies.some(checkHittingPlayer);
     if (isGameOver) {
         wastedElement.style.display = 'block';
+        clearInterval(countIntervalId);
+        clearInterval(spawnIntervalId);
         cancelAnimationFrame(animationId);
     }
 
@@ -63,8 +69,16 @@ function checkHittingPlayer(enemy) {
 }
 
 function spawnEnemies() {
-    setInterval(() => enemies.push(new Enemy(canvas.width, canvas.height, context, player)), 1000)
-    enemies.push(new Enemy(canvas.width, canvas.height, context, player));
+    let countOfSpawnEnemies = 1;
+    countIntervalId = setInterval(() => countOfSpawnEnemies++, 30000);
+    spawnIntervalId = setInterval(() => spawnCountEnemies(countOfSpawnEnemies), 1000)
+    spawnCountEnemies(countOfSpawnEnemies);
+}
+
+function spawnCountEnemies(count) {
+    for (let i = 0; i < count; i++) {
+        enemies.push(new Enemy(canvas.width, canvas.height, context, player));
+    }
 }
 
 function checkHittingEnemy(enemy) {
@@ -75,6 +89,7 @@ function checkHittingEnemy(enemy) {
         removeProjectileByIndex(index);
         enemy.health--;
         if (enemy.health < 1) {
+            increaseScore();
             enemy.createExplosion(particles);
         }
 
@@ -101,4 +116,9 @@ function createProjectile(event) {
 function projectileInsideWindow(projectile) {
     return projectile.x + projectile.radius > 0 && projectile.x - projectile.radius < canvas.width &&
         projectile.y + projectile.radius > 0 && projectile.y - projectile.radius < canvas.height;
+}
+
+function increaseScore() {
+    score += 250;
+    scoreElement.innerHTML = score;
 }
